@@ -8,3 +8,5 @@ I'm hoping that the use of this tool is intuitive and I have not yet written up 
 
 Tested on:  Kodi 17.3 and 17.4   and   mysql  Ver 15.1 Distrib 10.1.26-MariaDB
 
+The Windows .exe file is in the dist folder
+
