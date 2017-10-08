@@ -6,6 +6,7 @@ import pymysql
 import logging
 import logging.handlers
 import kodijson
+import myIcon
 from logging.handlers import RotatingFileHandler
 from ObjectListView import ObjectListView, ColumnDefn, OLVEvent
 from wx.lib.mixins import inspection
@@ -1156,6 +1157,9 @@ def start():
    #app = inspection.InspectableApp(0)
    frame = KodiDBeditorFrame(None)
    frame.SetTitle("Kodi Genre/Tag Manager    version " + currentVersion)
+   frame.SetIcon(myIcon.GetIcon_icon_ico())
+   
+   ## Set global variables
    frame.USEDB = None
    frame.USEKODI = None
    frame.KODIMENUITEMS = None
