@@ -16,21 +16,8 @@ from ServerAddGUI import *
 # Add this to the GUI.py file:  from MyObjectListView import *
 
 ## To Do
-## Check if kodi IP exists before adding new kodi connection
-## Add kodi menu item when adding kodi connection
-## add ping test to onSwitchKodi
 ## auto connect to new kodi server if connection test passes
-## Library commands
 
-#kodi = Kodi("http://172.16.0.10:8080/jsonrpc", "kodi", "kodi")
-#kodi.JSONRPC.Ping()
-#{u'jsonrpc': u'2.0', u'id': 0, u'result': u'pong'}
-#kodi.VideoLibrary.Clean()
-#{u'jsonrpc': u'2.0', u'id': 2, u'result': u'OK'}
-#kodi.VideoLibrary.Scan()
-#{u'jsonrpc': u'2.0', u'id': 3, u'result': u'OK'}
-#kodi.VideoLibrary.Export({ "options": { "overwrite": True, "actorthumbs": False, "images": False } })
-#{u'jsonrpc': u'2.0', u'id': 4, u'result': u'OK'}
 
 currentVersion = '1.01'
 MyAppDir = os.path.join(os.path.expanduser('~'), '.LucidDev')
@@ -87,22 +74,36 @@ class addKodiFrame (kodiAddFrame):
                   logging.debug('Adding new kodi entry')
                   self.CURSOR.execute('INSERT INTO KodiConnections (IP, PORT, USER, PASSWD) VALUES ("%s","%d","%s","%s")' % (str(kodiIP),int(kodiPort),str(kodiUser),str(kodiPasswd)))
                   self.Conn.commit()
+                  self.FRAME.USEKODI = kodiIP
                   logging.info('Successfully added a new Kodi connection')
                   self.CURSOR.execute('select * from KodiConnections;')
                   self.FRAME.kodis = self.CURSOR.fetchall()
                   self.Conn.close()
+                  for item in self.FRAME.KODIMENUITEMS:
+                     if item[1] == kodiIP:
+                        self.FRAME.KODIMENUITEMS.remove(item)
+                        self.FRAME.submenu_kodiConnection.RemoveItem(item[0])
                   newMenuItem = [wx.MenuItem( self.FRAME.submenu_kodiConnection, wx.ID_ANY, kodiIP, wx.EmptyString, wx.ITEM_NORMAL ), kodiIP]
                   self.FRAME.KODIMENUITEMS.append(newMenuItem)
                   self.FRAME.submenu_kodiConnection.AppendItem( newMenuItem[0] )
                   self.FRAME.Bind( wx.EVT_MENU, partial(self.FRAME.onSwitchKodi, newMenuItem[1]), id = newMenuItem[0].GetId() )
+                  self.FRAME.menuItem_deleteKodi.Enable(True)
+                  self.FRAME.menuItem_editKodi.Enable(True)
                   try:
                      kodi = kodijson.Kodi("http://%s:%d/jsonrpc" % (kodiIP, int(kodiPort)), "%s" % kodiUser, "%s" % kodiPasswd)
                      kodi.JSONRPC.Ping()
+                     self.FRAME.menuItem_updateKodi.Enable(True)
+                     self.FRAME.menuItem_cleanKodi.Enable(True)
+                     self.FRAME.menuItem_exportKodi.Enable(True)
+                     self.FRAME.statusBar.SetStatusText('Connected to Kodi %s' % self.FRAME.USEKODI, 1)
                   except:
                      logging.exception('Failed to connect to new Kodi connection')
                      dlg = wx.MessageDialog(self, 'Unable to connect to this Kodi connection. Check the connection details, edit this connection and try again.', 'Connection Failed', wx.OK)
                      dlg.ShowModal()
                      dlg.Destroy()
+                     self.FRAME.menuItem_updateKodi.Enable(False)
+                     self.FRAME.menuItem_cleanKodi.Enable(False)
+                     self.FRAME.menuItem_exportKodi.Enable(False)
                   self.Destroy()
             except:
                logging.exception('Failed to add a new Kodi connection')
@@ -190,7 +191,7 @@ class addServerFrame (serverAddFrame):
                   logging.info('Connecting to %s MySQL server' % self.FRAME.servers[0][0])
                   try:
                      conn, cursor = self.connectMySQL (self.FRAME.servers)
-                     self.FRAME.statusBar.SetStatusText('Connected to %s' % self.FRAME.servers[0][0])
+                     self.FRAME.statusBar.SetStatusText('Connected to MySQL server %s' % self.FRAME.servers[0][0])
                      if conn:
                         videoDatabases = self.FRAME.getVideoDBs (cursor)
                         if len(videoDatabases) > 1:
@@ -198,7 +199,7 @@ class addServerFrame (serverAddFrame):
                         if len(videoDatabases) > 0:
                            logging.info('Will use the %s database' % videoDatabases[-1])
                            self.FRAME.USEDB = videoDatabases[-1]
-                           self.FRAME.statusBar.SetStatusText('Connected to %s and using %s' % (self.FRAME.servers[0][0], self.FRAME.USEDB))
+                           self.FRAME.statusBar.SetStatusText('Connected to MySQL server %s and using %s' % (self.FRAME.servers[0][0], self.FRAME.USEDB))
                         else:
                            dlg = wx.MessageDialog(self.FRAME, 'There are no kodi video databases available on this MySQL server', 'No Databases Available', wx.OK)
                            dlg.ShowModal()
@@ -533,7 +534,7 @@ class KodiDBeditorFrame(MyFrame):
          conn, self.C = self.connectMySQL(self.servers)
          sql = 'use %s' % db
          self.C.execute(sql)
-         self.statusBar.SetStatusText('Connected to %s and using %s' % (self.servers[0][0], db))
+         self.statusBar.SetStatusText('Connected to MySQL server %s and using %s' % (self.servers[0][0], db))
          self.refreshGenreList()
          self.refreshTagList()
          conn.close()
@@ -559,11 +560,6 @@ class KodiDBeditorFrame(MyFrame):
          self.Conn.close()
          self.menuItem_deleteKodi.Enable(True)
          self.menuItem_editKodi.Enable(True)
-         ## ping kodi connection
-         ## if ping successful, enable the rest of the buttons
-         self.menuItem_updateKodi.Enable(True)
-         self.menuItem_cleanKodi.Enable(True)
-         self.menuItem_exportKodi.Enable(True)
       except:
          logging.exception('Failed to switch Kodi connections')
          dlg = wx.MessageDialog(self, 'Hit an unexpected error. See log %s for details' % logFile, 'Unexpected Error', wx.OK)
@@ -573,6 +569,21 @@ class KodiDBeditorFrame(MyFrame):
             self.Conn.close()
          except:
             pass
+      try:
+         kodi = kodijson.Kodi("http://%s:%d/jsonrpc" % (kodiDetails[0], int(kodiDetails[1])), "%s" % kodiDetails[2], "%s" % kodiDetails[3])
+         kodi.JSONRPC.Ping()
+         self.menuItem_updateKodi.Enable(True)
+         self.menuItem_cleanKodi.Enable(True)
+         self.menuItem_exportKodi.Enable(True)
+         self.statusBar.SetStatusText('Connected to Kodi %s' % self.USEKODI, 1)
+      except:
+         logging.exception('Failed to connect to new Kodi connection')
+         dlg = wx.MessageDialog(self, 'Unable to connect to this Kodi connection. Check the connection details, edit this connection and try again.', 'Connection Failed', wx.OK)
+         dlg.ShowModal()
+         dlg.Destroy()
+         self.menuItem_updateKodi.Enable(False)
+         self.menuItem_cleanKodi.Enable(False)
+         self.menuItem_exportKodi.Enable(False)
 
    def onRetrieve( self, event ):
       ## Get either tvshows or movies based on the combo box selection and display them in the itemBox
@@ -1024,7 +1035,6 @@ class KodiDBeditorFrame(MyFrame):
          dlg.ShowModal()
          dlg.Destroy()
       try:
-         print servers
          kodi = kodijson.Kodi("http://%s:%d/jsonrpc" % (servers[0], int(servers[1])), "%s" % servers[2], "%s" % servers[3])
          kodi.JSONRPC.Ping()
          kodi.VideoLibrary.Scan()
@@ -1270,7 +1280,7 @@ def start():
             if len(videoDatabases) > 0:
                logging.info('Will use the %s database' % videoDatabases[-1])
                frame.USEDB = str(videoDatabases[-1])
-               frame.statusBar.SetStatusText('Connected to %s and using %s' % (frame.servers[0][0], frame.USEDB))
+               frame.statusBar.SetStatusText('Connected to MySQL server %s and using %s' % (frame.servers[0][0], frame.USEDB))
                frame.refreshGenreList()
                frame.refreshTagList()
             else:

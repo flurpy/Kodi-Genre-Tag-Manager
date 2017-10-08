@@ -229,7 +229,7 @@ class MyFrame ( wx.Frame ):
 		
 		self.SetSizer( parentSizer )
 		self.Layout()
-		self.statusBar = self.CreateStatusBar( 1, wx.ST_SIZEGRIP, wx.ID_ANY )
+		self.statusBar = self.CreateStatusBar( 2, wx.ST_SIZEGRIP, wx.ID_ANY )
 		
 		self.Centre( wx.BOTH )
 		
