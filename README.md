@@ -7,7 +7,7 @@ Background: I use genres to categorize TV shows for our household. Shows that we
 I'm hoping that the use of this tool is intuitive and I have not yet written up any documentation. If you have any questions, feel free to send me a message.
 
 Tested on:
-
 Kodi 17.3 and 17.4
+
 mysql  Ver 15.1 Distrib 10.1.26-MariaDB
 
