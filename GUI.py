@@ -50,6 +50,35 @@ class MyFrame ( wx.Frame ):
 		
 		self.menuBar.Append( self.menu_SearchFor, u"Search For..." ) 
 		
+		self.menu_KodiConnection = wx.Menu()
+		self.menuItem_setupKodi = wx.MenuItem( self.menu_KodiConnection, wx.ID_ANY, u"Setup Kodi Connection", wx.EmptyString, wx.ITEM_NORMAL )
+		self.menu_KodiConnection.AppendItem( self.menuItem_setupKodi )
+		
+		self.submenu_kodiConnection = wx.Menu()
+		self.menu_KodiConnection.AppendSubMenu( self.submenu_kodiConnection, u"Connect To:" )
+		
+		self.menuItem_deleteKodi = wx.MenuItem( self.menu_KodiConnection, wx.ID_ANY, u"Delete Current Connection", wx.EmptyString, wx.ITEM_NORMAL )
+		self.menu_KodiConnection.AppendItem( self.menuItem_deleteKodi )
+		self.menuItem_deleteKodi.Enable( False )
+		
+		self.menuItem_editKodi = wx.MenuItem( self.menu_KodiConnection, wx.ID_ANY, u"Edit Current Connection", wx.EmptyString, wx.ITEM_NORMAL )
+		self.menu_KodiConnection.AppendItem( self.menuItem_editKodi )
+		self.menuItem_editKodi.Enable( False )
+		
+		self.menuItem_updateKodi = wx.MenuItem( self.menu_KodiConnection, wx.ID_ANY, u"Update Library", wx.EmptyString, wx.ITEM_NORMAL )
+		self.menu_KodiConnection.AppendItem( self.menuItem_updateKodi )
+		self.menuItem_updateKodi.Enable( False )
+		
+		self.menuItem_cleanKodi = wx.MenuItem( self.menu_KodiConnection, wx.ID_ANY, u"Clean Library", wx.EmptyString, wx.ITEM_NORMAL )
+		self.menu_KodiConnection.AppendItem( self.menuItem_cleanKodi )
+		self.menuItem_cleanKodi.Enable( False )
+		
+		self.menuItem_exportKodi = wx.MenuItem( self.menu_KodiConnection, wx.ID_ANY, u"Export Library To Files", wx.EmptyString, wx.ITEM_NORMAL )
+		self.menu_KodiConnection.AppendItem( self.menuItem_exportKodi )
+		self.menuItem_exportKodi.Enable( False )
+		
+		self.menuBar.Append( self.menu_KodiConnection, u"Kodi Connection" ) 
+		
 		self.SetMenuBar( self.menuBar )
 		
 		parentSizer = wx.BoxSizer( wx.VERTICAL )
@@ -97,6 +126,20 @@ class MyFrame ( wx.Frame ):
 		sizerRightPanel = wx.BoxSizer( wx.HORIZONTAL )
 		
 		sizerGenre = wx.StaticBoxSizer( wx.StaticBox( self.panelRight, wx.ID_ANY, u"Genres" ), wx.VERTICAL )
+		
+		genreFilterSizer = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.radio_OnlyTVgenres = wx.RadioButton( sizerGenre.GetStaticBox(), wx.ID_ANY, u"Only TV Genres", wx.DefaultPosition, wx.DefaultSize, 0 )
+		genreFilterSizer.Add( self.radio_OnlyTVgenres, 0, wx.ALL, 5 )
+		
+		self.radio_OnlyMoviesGenres = wx.RadioButton( sizerGenre.GetStaticBox(), wx.ID_ANY, u"Only Movie Genres", wx.DefaultPosition, wx.DefaultSize, 0 )
+		genreFilterSizer.Add( self.radio_OnlyMoviesGenres, 0, wx.ALL, 5 )
+		
+		self.radio_AllGenres = wx.RadioButton( sizerGenre.GetStaticBox(), wx.ID_ANY, u"Show All Genres", wx.DefaultPosition, wx.DefaultSize, 0 )
+		genreFilterSizer.Add( self.radio_AllGenres, 0, wx.ALL, 5 )
+		
+		
+		sizerGenre.Add( genreFilterSizer, 0, 0, 5 )
 		
 		self.genreBox = MyOvl( sizerGenre.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LC_REPORT )
 		sizerGenre.Add( self.genreBox, 1, wx.ALL|wx.EXPAND, 5 )
@@ -196,6 +239,12 @@ class MyFrame ( wx.Frame ):
 		self.Bind( wx.EVT_MENU, self.onSearchPG, id = self.menuItemPG.GetId() )
 		self.Bind( wx.EVT_MENU, self.onSearchPG13, id = self.menuItemPG13.GetId() )
 		self.Bind( wx.EVT_MENU, self.onSearchR, id = self.menuItemR.GetId() )
+		self.Bind( wx.EVT_MENU, self.onSetupKodi, id = self.menuItem_setupKodi.GetId() )
+		self.Bind( wx.EVT_MENU, self.onDeleteKodi, id = self.menuItem_deleteKodi.GetId() )
+		self.Bind( wx.EVT_MENU, self.onEditKodi, id = self.menuItem_editKodi.GetId() )
+		self.Bind( wx.EVT_MENU, self.onUpdateLibrary, id = self.menuItem_updateKodi.GetId() )
+		self.Bind( wx.EVT_MENU, self.onCleanLibrary, id = self.menuItem_cleanKodi.GetId() )
+		self.Bind( wx.EVT_MENU, self.onExportLibrary, id = self.menuItem_exportKodi.GetId() )
 		self.buttonRetrieve.Bind( wx.EVT_BUTTON, self.onRetrieve )
 		self.buttonDeleteGenre.Bind( wx.EVT_BUTTON, self.onDeleteGenre )
 		self.buttonGenreShow.Bind( wx.EVT_BUTTON, self.onShowGenreTitles )
@@ -226,6 +275,24 @@ class MyFrame ( wx.Frame ):
 		event.Skip()
 	
 	def onSearchR( self, event ):
+		event.Skip()
+	
+	def onSetupKodi( self, event ):
+		event.Skip()
+	
+	def onDeleteKodi( self, event ):
+		event.Skip()
+	
+	def onEditKodi( self, event ):
+		event.Skip()
+	
+	def onUpdateLibrary( self, event ):
+		event.Skip()
+	
+	def onCleanLibrary( self, event ):
+		event.Skip()
+	
+	def onExportLibrary( self, event ):
 		event.Skip()
 	
 	def onRetrieve( self, event ):
