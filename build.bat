@@ -1,0 +1,1 @@
+pyinstaller.exe -F -i icon.ico -w KodiGenreTagManager.spec
