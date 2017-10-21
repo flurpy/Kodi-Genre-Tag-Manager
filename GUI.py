@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*- 
 
 ###########################################################################
-## Python code generated with wxFormBuilder (version Jun 17 2015)
+## Python code generated with wxFormBuilder (version Dec 21 2016)
 ## http://www.wxformbuilder.org/
 ##
 ## PLEASE DO "NOT" EDIT THIS FILE!
@@ -20,7 +20,7 @@ class MyFrame ( wx.Frame ):
 	def __init__( self, parent ):
 		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 1107,668 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 		
-		self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
+		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 		
 		self.menuBar = wx.MenuBar( 0 )
 		self.menuBar.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_INACTIVECAPTION ) )
@@ -31,50 +31,50 @@ class MyFrame ( wx.Frame ):
 		self.menu_DB.AppendSubMenu( self.dbSubMenu, u"Switch to Different Database" )
 		
 		self.menuItemEditServer = wx.MenuItem( self.menu_DB, wx.ID_ANY, u"Edit MySQL Server", wx.EmptyString, wx.ITEM_NORMAL )
-		self.menu_DB.AppendItem( self.menuItemEditServer )
+		self.menu_DB.Append( self.menuItemEditServer )
 		
 		self.menuBar.Append( self.menu_DB, u"Kodi Database" ) 
 		
 		self.menu_SearchFor = wx.Menu()
 		self.menuItemG = wx.MenuItem( self.menu_SearchFor, wx.ID_ANY, u"G Movies", wx.EmptyString, wx.ITEM_NORMAL )
-		self.menu_SearchFor.AppendItem( self.menuItemG )
+		self.menu_SearchFor.Append( self.menuItemG )
 		
 		self.menuItemPG = wx.MenuItem( self.menu_SearchFor, wx.ID_ANY, u"PG Movies", wx.EmptyString, wx.ITEM_NORMAL )
-		self.menu_SearchFor.AppendItem( self.menuItemPG )
+		self.menu_SearchFor.Append( self.menuItemPG )
 		
 		self.menuItemPG13 = wx.MenuItem( self.menu_SearchFor, wx.ID_ANY, u"PG-13 Movies", wx.EmptyString, wx.ITEM_NORMAL )
-		self.menu_SearchFor.AppendItem( self.menuItemPG13 )
+		self.menu_SearchFor.Append( self.menuItemPG13 )
 		
 		self.menuItemR = wx.MenuItem( self.menu_SearchFor, wx.ID_ANY, u"R Movies", wx.EmptyString, wx.ITEM_NORMAL )
-		self.menu_SearchFor.AppendItem( self.menuItemR )
+		self.menu_SearchFor.Append( self.menuItemR )
 		
 		self.menuBar.Append( self.menu_SearchFor, u"Search For..." ) 
 		
 		self.menu_KodiConnection = wx.Menu()
 		self.menuItem_setupKodi = wx.MenuItem( self.menu_KodiConnection, wx.ID_ANY, u"Setup Kodi Connection", wx.EmptyString, wx.ITEM_NORMAL )
-		self.menu_KodiConnection.AppendItem( self.menuItem_setupKodi )
+		self.menu_KodiConnection.Append( self.menuItem_setupKodi )
 		
 		self.submenu_kodiConnection = wx.Menu()
 		self.menu_KodiConnection.AppendSubMenu( self.submenu_kodiConnection, u"Connect To:" )
 		
 		self.menuItem_deleteKodi = wx.MenuItem( self.menu_KodiConnection, wx.ID_ANY, u"Delete Current Connection", wx.EmptyString, wx.ITEM_NORMAL )
-		self.menu_KodiConnection.AppendItem( self.menuItem_deleteKodi )
+		self.menu_KodiConnection.Append( self.menuItem_deleteKodi )
 		self.menuItem_deleteKodi.Enable( False )
 		
 		self.menuItem_editKodi = wx.MenuItem( self.menu_KodiConnection, wx.ID_ANY, u"Edit Current Connection", wx.EmptyString, wx.ITEM_NORMAL )
-		self.menu_KodiConnection.AppendItem( self.menuItem_editKodi )
+		self.menu_KodiConnection.Append( self.menuItem_editKodi )
 		self.menuItem_editKodi.Enable( False )
 		
 		self.menuItem_updateKodi = wx.MenuItem( self.menu_KodiConnection, wx.ID_ANY, u"Update Library", wx.EmptyString, wx.ITEM_NORMAL )
-		self.menu_KodiConnection.AppendItem( self.menuItem_updateKodi )
+		self.menu_KodiConnection.Append( self.menuItem_updateKodi )
 		self.menuItem_updateKodi.Enable( False )
 		
 		self.menuItem_cleanKodi = wx.MenuItem( self.menu_KodiConnection, wx.ID_ANY, u"Clean Library", wx.EmptyString, wx.ITEM_NORMAL )
-		self.menu_KodiConnection.AppendItem( self.menuItem_cleanKodi )
+		self.menu_KodiConnection.Append( self.menuItem_cleanKodi )
 		self.menuItem_cleanKodi.Enable( False )
 		
 		self.menuItem_exportKodi = wx.MenuItem( self.menu_KodiConnection, wx.ID_ANY, u"Export Library To Files", wx.EmptyString, wx.ITEM_NORMAL )
-		self.menu_KodiConnection.AppendItem( self.menuItem_exportKodi )
+		self.menu_KodiConnection.Append( self.menuItem_exportKodi )
 		self.menuItem_exportKodi.Enable( False )
 		
 		self.menuBar.Append( self.menu_KodiConnection, u"Kodi Connection" ) 
@@ -84,7 +84,7 @@ class MyFrame ( wx.Frame ):
 		parentSizer = wx.BoxSizer( wx.VERTICAL )
 		
 		
-		parentSizer.AddSpacer( ( 0, 5), 0, 0, 5 )
+		parentSizer.Add( ( 0, 5), 0, 0, 5 )
 		
 		self.splitter = wx.SplitterWindow( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.SP_3DBORDER )
 		self.splitter.Bind( wx.EVT_IDLE, self.splitterOnIdle )
@@ -93,12 +93,12 @@ class MyFrame ( wx.Frame ):
 		sizerLeftPanel = wx.BoxSizer( wx.VERTICAL )
 		
 		
-		sizerLeftPanel.AddSpacer( ( 0, 10), 0, 0, 5 )
+		sizerLeftPanel.Add( ( 0, 10), 0, 0, 5 )
 		
 		sizerDisplayChooser = wx.BoxSizer( wx.HORIZONTAL )
 		
 		
-		sizerDisplayChooser.AddSpacer( ( 5, 0), 0, 0, 5 )
+		sizerDisplayChooser.Add( ( 5, 0), 0, 0, 5 )
 		
 		self.textDisplay = wx.StaticText( self.panelLeft, wx.ID_ANY, u"Display: ", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.textDisplay.Wrap( -1 )
@@ -174,7 +174,7 @@ class MyFrame ( wx.Frame ):
 		sizerGenre.Add( sizerGenreAdd, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
 		
 		
-		sizerGenre.AddSpacer( ( 0, 10), 0, 0, 5 )
+		sizerGenre.Add( ( 0, 10), 0, 0, 5 )
 		
 		
 		sizerRightPanel.Add( sizerGenre, 1, wx.EXPAND, 5 )
@@ -214,7 +214,7 @@ class MyFrame ( wx.Frame ):
 		sizerTag.Add( sizerTagAdd, 0, 0, 5 )
 		
 		
-		sizerTag.AddSpacer( ( 0, 10), 0, 0, 5 )
+		sizerTag.Add( ( 0, 10), 0, 0, 5 )
 		
 		
 		sizerRightPanel.Add( sizerTag, 1, wx.EXPAND, 5 )
@@ -229,7 +229,7 @@ class MyFrame ( wx.Frame ):
 		
 		self.SetSizer( parentSizer )
 		self.Layout()
-		self.statusBar = self.CreateStatusBar( 2, wx.ST_SIZEGRIP, wx.ID_ANY )
+		self.statusBar = self.CreateStatusBar( 2, 0, wx.ID_ANY )
 		
 		self.Centre( wx.BOTH )
 		

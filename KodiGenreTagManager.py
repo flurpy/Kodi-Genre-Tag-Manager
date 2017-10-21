@@ -20,7 +20,7 @@ from ServerAddGUI import *
 ## auto connect to new kodi server if connection test passes
 
 
-currentVersion = '1.01'
+currentVersion = '1.02'
 MyAppDir = os.path.join(os.path.expanduser('~'), '.LucidDev')
 ThisAppDir = os.path.join(MyAppDir, 'KodiDBeditor')
 LogDir = os.path.join(ThisAppDir, 'logs')
@@ -709,7 +709,6 @@ class KodiDBeditorFrame(MyFrame):
    def onUpdateGenres( self, event ):
       ## Make the genre changes for the selected title based on the current checkbox selections
       items = self.itemBox.GetSelectedObjects()
-      print str([item.TITLE for item in items])
       try:
          logging.info('Updating genres for %s' % str([item.TITLE for item in items]))
          objects = self.genreBox.GetObjects()
@@ -1059,7 +1058,6 @@ class KodiDBeditorFrame(MyFrame):
          dlg.ShowModal()
          dlg.Destroy()
       try:
-         print servers
          kodi = kodijson.Kodi("http://%s:%d/jsonrpc" % (servers[0], int(servers[1])), "%s" % servers[2], "%s" % servers[3])
          kodi.JSONRPC.Ping()
          kodi.VideoLibrary.Clean()
@@ -1083,7 +1081,6 @@ class KodiDBeditorFrame(MyFrame):
          dlg.ShowModal()
          dlg.Destroy()
       try:
-         print servers
          kodi = kodijson.Kodi("http://%s:%d/jsonrpc" % (servers[0], int(servers[1])), "%s" % servers[2], "%s" % servers[3])
          kodi.JSONRPC.Ping()
          kodi.VideoLibrary.Export({ "options": { "overwrite": True, "actorthumbs": False, "images": False } })
